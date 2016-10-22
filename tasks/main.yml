@@ -1,0 +1,49 @@
+- name: install wget
+  apt: name=wget state=present
+
+- name: download WordPress
+  get_url: url=https://wordpress.org/latest.tar.gz dest=/root/wordpress-latest.tar.gz
+
+- name: install mysql
+  apt: name=mysql-server state=present
+
+- name: install libapache2-mod-php
+  apt: name=libapache2-mod-php state=present
+
+- name: install apache2
+  apt: name=apache2 state=present
+
+- name: disable mpm_event module
+  apache2_module: name=mpm_event state=absent
+
+- name: enable mpm_prefork module
+  apache2_module: name=mpm_prefork state=present
+
+- name: unpack WordPress
+  unarchive: copy=no remote_src=yes src=/root/wordpress-latest.tar.gz dest={{ wordpress_dest }}
+
+- name: enable php module
+  apache2_module: name="php7.0" state=present
+
+- name: install php-mysql
+  apt: name=php-mysql state=present
+  notify: restart apache2
+
+- name: enable rewrite module
+  apache2_module: name=rewrite state=present
+  notify: restart apache2
+
+- name: disable the default site
+  shell: a2dissite 000-default
+  notify: restart apache2
+
+- name: put the WP site
+  template: src=wordpress.conf dest=/etc/apache2/sites-available/wordpress.conf
+  notify: restart apache2
+
+- name: enable the WP site
+  shell: a2ensite wordpress
+  notify: restart apache2
+
+  #- name: create a MySQL DB
+  #
