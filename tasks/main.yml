@@ -45,5 +45,11 @@
   shell: a2ensite wordpress
   notify: restart apache2
 
-  #- name: create a MySQL DB
-  #
+- name: install python-mysqldb
+  apt: name=python-mysqldb state=present
+
+- name: create a MySQL DB
+  mysql_db: name={{ wordpress_db_name }} state=present
+
+- name: create a MySQL user
+  mysql_user: name={{ wordpress_db_user }} password={{ wordpress_db_password }} state=present priv="{{ wordpress_db_name }}.*:ALL"

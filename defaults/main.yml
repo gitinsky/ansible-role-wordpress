@@ -1,1 +1,2 @@
 wordpress_dest: /var/www/html/wordpress
+wordpress_db_name: db_wordpress
