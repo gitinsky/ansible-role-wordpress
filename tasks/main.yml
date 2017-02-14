@@ -20,7 +20,7 @@
   apache2_module: name=mpm_prefork state=present
 
 - name: unpack WordPress
-  unarchive: copy=no remote_src=yes src=/root/wordpress-latest.tar.gz dest={{ wordpress_dest }}
+  unarchive: remote_src=yes src=/root/wordpress-latest.tar.gz dest={{ wordpress_dest }}
 
 - name: enable php module
   apache2_module: name="php7.0" state=present
@@ -53,3 +53,6 @@
 
 - name: create a MySQL user
   mysql_user: name={{ wordpress_db_user }} password={{ wordpress_db_password }} state=present priv="{{ wordpress_db_name }}.*:ALL"
+
+- name: install Postfix
+  apt: name=postfix state=present
