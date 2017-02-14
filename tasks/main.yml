@@ -56,3 +56,7 @@
 
 - name: install Postfix
   apt: name=postfix state=present
+
+- name: put Postfix config
+  template: src=main.cf dest=/etc/postfix/main.cf
+  notify: restart postfix
