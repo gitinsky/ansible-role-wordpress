@@ -20,7 +20,7 @@
   apache2_module: name=mpm_prefork state=present
 
 - name: unpack WordPress
-  unarchive: remote_src=yes src=/root/wordpress-latest.tar.gz dest={{ wordpress_dest }}
+  unarchive: remote_src=yes src=/root/wordpress-latest.tar.gz dest={{ wordpress_dest }} owner=www-data group=www-data
 
 - name: enable php module
   apache2_module: name="php7.0" state=present
